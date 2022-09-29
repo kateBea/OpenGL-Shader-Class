@@ -13,15 +13,14 @@
 class Shader
 {
 public:
-	// construct shader by providing path to vertex  
+	// construct shader by providing path to vertex
 	// and fragment shader source file
 	Shader(std::string_view vertexSourceDir,
-		std::string_view fragmentSourceDir);
-
+		   std::string_view fragmentSourceDir);
 
 	// use created shader program
 	auto use() -> void;
-	
+
 	// get shader program ID
 	auto getProgramId() const -> std::uint32_t;
 
@@ -32,7 +31,7 @@ private:
 };
 
 inline Shader::Shader(std::string_view vertexSourceDir,
-	std::string_view fragmentSourceDir)
+					  std::string_view fragmentSourceDir)
 {
 	std::string vertexShaderSource{};
 	std::string pixelShaderSource{};
@@ -43,25 +42,20 @@ inline Shader::Shader(std::string_view vertexSourceDir,
 	std::stringstream vertexShaderStream{};
 	std::stringstream pixelShaderStream{};
 
-	// std::ifstream objects can throw exceptions
 	vertexShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	pixelShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
 	try
 	{
-		// open vertex shader and fragment shader source files
 		vertexShaderFile.open(vertexSourceDir.data());
 		pixelShaderFile.open(fragmentSourceDir.data());
-		
-		// read file buffer into the streams
+
 		vertexShaderStream << vertexShaderFile.rdbuf();
 		pixelShaderStream << pixelShaderFile.rdbuf();
-			
-		// close files
+
 		vertexShaderFile.close();
 		pixelShaderFile.close();
 
-		// convert streams buffer contents into strings
 		vertexShaderSource = vertexShaderStream.str();
 		pixelShaderSource = pixelShaderStream.str();
 	}
@@ -74,14 +68,13 @@ inline Shader::Shader(std::string_view vertexSourceDir,
 		std::cerr << "Some other exceptions...\n";
 	}
 
-	const char* vertexShaderCstring{ vertexShaderSource.c_str() };
-	const char* pixelShaderCstring{ pixelShaderSource.c_str() };
+	const char *vertexShaderCstring{vertexShaderSource.c_str()};
+	const char *pixelShaderCstring{pixelShaderSource.c_str()};
 
-	// compile vertex shader
 	std::uint32_t vertexShaderID{};
 	std::int32_t success{};
 
-	constexpr auto bufferSize{ 512 };
+	constexpr auto bufferSize{512};
 	char infoLog[bufferSize];
 
 	vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -95,7 +88,6 @@ inline Shader::Shader(std::string_view vertexSourceDir,
 		std::cerr << "Error on vertex shader compilation: " << infoLog << '\n';
 	}
 
-	// compile pixel shader
 	std::uint32_t pixelShaderID{};
 
 	pixelShaderID = glCreateShader(GL_FRAGMENT_SHADER);
