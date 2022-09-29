@@ -62,20 +62,19 @@ int main(int argc, char** argv)
 
 	glGenVertexArrays(1, &vertexArrayBuffer);
 	glGenBuffers(1, &vertexBufferObject);
-	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-	glBindVertexArray(vertexArrayBuffer);
 
+	glBindVertexArray(vertexArrayBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// Position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), reinterpret_cast<void*>(0));
 	glEnableVertexAttribArray(0);
+	
 	// Color attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	// Unbind VAO
 	glBindVertexArray(0);
 
 	std::int32_t viewPortWidth{};
@@ -85,13 +84,7 @@ int main(int argc, char** argv)
 	{
 		glfwPollEvents();
 
-		// Update viewport to resize triangle on window resizing
 		glfwGetFramebufferSize(window, &viewPortWidth, &viewPortHeight);
-
-		// tell OpenGL the size of the rendering window so OpenGL knows how we want 
-		// to display the data and coordinates with respect
-		// to the window. We set those dimensions via the glViewport function
-		// specify whicch part of the screen we want OpenGL to render
 		glViewport(0, 0, viewPortWidth, viewPortHeight);
 
 		// Rendering
